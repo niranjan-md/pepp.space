@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(-45deg, #2c0446, #3b0f70, #1e0b5e, #4b0f6b);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .star {
+      position: absolute;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle var(--duration) ease-in-out infinite;
+      opacity: 0;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0; transform: scale(0.5); }
+      50% { opacity: 1; transform: scale(1); }
+    }
+
+    .container {
+      text-align: center;
+      padding: 40px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .fortune-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37),
+                  0 0 20px rgba(255, 0, 255, 0.2),
+                  0 0 30px rgba(0, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      max-width: 500px;
+      margin: 20px;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      transition: all 0.5s ease;
+      animation: cardFloat 6s ease-in-out infinite;
+    }
+
+    @keyframes cardFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(2deg); }
+    }
+
+    .fortune-card:hover {
+      transform: scale(1.02) translateY(-10px);
+      box-shadow: 0 15px 45px 0 rgba(31, 38, 135, 0.37),
+                  0 0 30px rgba(255, 0, 255, 0.3),
+                  0 0 40px rgba(0, 255, 255, 0.3);
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 2.8em;
+      margin-bottom: 30px;
+      text-shadow: 0 0 10px #ff00ff,
+                   0 0 20px #00ffff,
+                   0 0 30px #ff00ff;
+      animation: titlePulse 4s ease-in-out infinite;
+    }
+
+    @keyframes titlePulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    #fortune-text {
+      color: #fff;
+      font-size: 1.5em;
+      min-height: 80px;
+      margin: 20px 0;
+      opacity: 0;
+      transform: translateY(20px) rotateX(-30deg);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    #fortune-text.show {
+      opacity: 1;
+      transform: translateY(0) rotateX(0);
+    }
+
+    .crystal-ball {
+      font-size: 6em;
+      margin: 20px;
+      display: inline-block;
+      animation: crystalFloat 4s ease-in-out infinite,
+                 crystalGlow 2s ease-in-out infinite;
+      position: relative;
+    }
+
+    @keyframes crystalFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      25% { transform: translateY(-15px) rotate(-5deg); }
+      75% { transform: translateY(15px) rotate(5deg); }
+    }
+
+    @keyframes crystalGlow {
+      0%, 100% { text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
+                              0 0 30px rgba(255, 0, 255, 0.5),
+                              0 0 40px rgba(0, 255, 255, 0.5); }
+      50% { text-shadow: 0 0 30px rgba(255, 255, 255, 0.9),
+                         0 0 40px rgba(255, 0, 255, 0.7),
+                         0 0 50px rgba(0, 255, 255, 0.7); }
+    }
+
+    button {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+      color: white;
+      padding: 15px 30px;
+      border-radius: 50px;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin: 15px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.2),
+        transparent
+      );
+      transition: 0.5s;
+    }
+
+    button:hover::before {
+      left: 100%;
+    }
+
+    button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.1);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3),
+                  0 0 40px rgba(255, 0, 255, 0.2),
+                  0 0 60px rgba(0, 255, 255, 0.2);
+    }
+
+    .particle {
+      position: fixed;
+      pointer-events: none;
+      opacity: 0;
+      animation: particleFade 2s ease-out forwards;
+      filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+    }
+
+    @keyframes particleFade {
+      0% { 
+        transform: translate(0, 0) rotate(0deg) scale(1);
+        opacity: 1;
+      }
+      100% { 
+        transform: translate(var(--tx), var(--ty)) rotate(360deg) scale(0);
+        opacity: 0;
+      }
+    }
+
+    .mystical-orb {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.8), rgba(255, 0, 255, 0.4));
+      filter: blur(2px);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="stars"></div>
+  <div class="container">
+    <div class="fortune-card">
+      <h1>✨ Fortune Teller ✨</h1>
+      <div class="crystal-ball">🔮</div>
+      <p id="fortune-text">Seek your mystical fortune...</p>
+      <button onclick="generateFortune()">Reveal Fortune</button>
+      <button onclick="activateChaos()">Unleash Magic</button>
+    </div>
+  </div>
+
+  <script>
+    // Create stars background
+    const starsContainer = document.querySelector('.stars');
+    for (let i = 0; i < 100; i++) {
+      const star = document.createElement('div');
+      star.className = 'star';
+      star.style.left = Math.random() * 100 + '%';
+      star.style.top = Math.random() * 100 + '%';
+      star.style.width = Math.random() * 3 + 'px';
+      star.style.height = star.style.width;
+      star.style.setProperty('--duration', Math.random() * 3 + 2 + 's');
+      starsContainer.appendChild(star);
+    }
+
+    // Create floating orbs
+    function createOrb() {
+      const orb = document.createElement('div');
+      orb.className = 'mystical-orb';
+      document.body.appendChild(orb);
+
+      let x = Math.random() * window.innerWidth;
+      let y = Math.random() * window.innerHeight;
+      let dx = (Math.random() - 0.5) * 2;
+      let dy = (Math.random() - 0.5) * 2;
+
+      function animateOrb() {
+        x += dx;
+        y += dy;
+
+        if (x < 0 || x > window.innerWidth) dx = -dx;
+        if (y < 0 || y > window.innerHeight) dy = -dy;
+
+        orb.style.left = x + 'px';
+        orb.style.top = y + 'px';
+
+        requestAnimationFrame(animateOrb);
+      }
+
+      animateOrb();
+    }
+
+    // Create multiple orbs
+    for (let i = 0; i < 5; i++) {
+      createOrb();
+    }
+
+    const fortunes = [
+      "The cosmic penguin whispers: your next pizza will have magical properties",
+      "A rainbow-colored unicorn will teach you to dance in your dreams tonight",
+      "Your future holds a conversation with a wise talking cactus",
+      "Next week, you'll discover your pet can speak French... but only on Tuesdays",
+      "The stars align to reveal: your socks are plotting a midnight party",
+      "A time-traveling butterfly will bring you a message from your future self",
+      "You will soon master the art of cloud-surfing with a mystical teacup",
+      "The moon suggests you'll find a portal to a dimension of infinite cookies",
+      "Your spirit guide is a breakdancing octopus wearing a top hat",
+      "Tomorrow, you'll accidentally invent a new type of sandwich that grants wishes",
+		 "A great adventure is in your near future.",
+	  "Something unexpected will bring you joy soon.",
+	  "You will find clarity in the most unlikely place.",
+	  "An old friend will reappear with good news.",
+	  "Your patience will soon be rewarded.",
+	  "A dream you’ve been holding onto will come true.",
+	  "Take the risk—it will lead to something beautiful.",
+	  "The answer you seek is already within you.",
+	  "Someone close to you has a secret to share.",
+	  "A journey of self-discovery is about to begin.",
+	  "Luck is on your side today!",
+	  "A mysterious message will bring enlightenment.",
+	  "Trust your instincts—they will not lead you astray.",
+	  "A hidden opportunity is waiting for you to find it.",
+	  "You will soon be drawn into an exciting new project.",
+	  "The universe has a surprise in store for you.",
+	  "Happiness comes to those who appreciate the small things.",
+	  "A long-lost memory will resurface and guide your way.",
+	  "Your kindness will come back to you tenfold.",
+	  "A lucky break is just around the corner.",
+	  "An unexpected gift will brighten your day.",
+	  "Your talents will soon be recognized.",
+	  "The stars align in your favor—seize the moment!",
+	  "A new friendship will prove to be life-changing.",
+	  "Beware of distractions; stay focused on your goals.",
+	  "Someone is thinking of you fondly at this moment.",
+	  "A financial opportunity will present itself soon.",
+	  "You will cross paths with someone who changes your perspective.",
+	  "A new chapter in your life is about to unfold.",
+	  "You will find inspiration in an unusual place.",
+	  "A door you thought was closed forever will reopen.",
+	  "Embrace the unknown—it holds wonderful surprises.",
+	  "A heartwarming reunion is on the horizon.",
+	  "Your intuition is stronger than you think—trust it.",
+	  "A wise decision will lead you to great success.",
+	  "The universe whispers its secrets to those who listen.",
+	  "Something you lost will soon be found.",
+	  "A creative breakthrough is just around the corner.",
+	  "Love will come when you least expect it.",
+	  "Your efforts will be noticed and appreciated.",
+	  "New opportunities will arise when you let go of doubt.",
+	  "A chance encounter will change your path forever.",
+	  "Your inner strength will be tested—and you will prevail.",
+	  "A lucky number will guide your next big decision.",
+	  "A small act of kindness will have a huge impact.",
+	  "A lesson from the past will help shape your future.",
+	  "Your curiosity will lead you to an exciting discovery.",
+	  "A peaceful moment will bring you great clarity.",
+	  "You will soon unlock a hidden potential within yourself.",
+	  "Embrace change—it will lead you to something better.",
+		 "You will step on a Lego soon. Be strong.",
+  "The Wi-Fi will go down at the worst possible moment.",
+  "Your next snack will be legendary.",
+  "You will find money… but it will be just one cent.",
+  "A cat somewhere is judging you right now.",
+  "You will soon meet someone who loves pineapple on pizza.",
+  "Your next nap will feel like a vacation.",
+  "Beware of doors that push when they say pull.",
+  "You will win an argument… in the shower later.",
+  "Someone is about to text you 'k' and ruin your day.",
+  "Your socks will mysteriously disappear in the laundry.",
+  "Soon, you will have a deep conversation with a pet.",
+  "You will forget why you walked into a room—multiple times.",
+  "A coffee stain is in your near future. Accept your fate.",
+  "Your phone battery will betray you when you need it most.",
+  "You will soon Google something really dumb.",
+  "An embarrassing childhood memory will randomly haunt you.",
+  "The next song on shuffle will be your life’s theme song.",
+  "You will yawn after reading this fortune.",
+  "Your next sneeze will be the most satisfying one yet.",
+  "A package will arrive… but you won’t remember ordering it.",
+  "You will make a genius joke, and no one will hear it.",
+  "The universe is laughing at your search history.",
+  "You will find the remote… in the weirdest place.",
+  "Your dream job exists, but it probably involves naps.",
+		  "You are stronger than you think. Keep going!",
+  "A small step today will lead to great things tomorrow.",
+  "You are capable of more than you believe.",
+  "Happiness is just around the corner—keep moving forward.",
+  "Your kindness will come back to you in unexpected ways.",
+  "Trust yourself. You are on the right path.",
+  "Your potential is limitless. Don’t be afraid to dream big.",
+  "A new opportunity will soon reveal itself to you.",
+  "You will inspire someone today without even realizing it.",
+  "Every challenge is a chance to grow. You’ve got this!",
+  "Someone is grateful for your presence in their life.",
+  "Your hard work will pay off in ways you can’t imagine.",
+  "Believe in the magic of new beginnings.",
+  "Your smile has the power to brighten someone’s day.",
+  "Don’t stress over things you can’t control. Let it go.",
+  "You are enough, just as you are.",
+  "A peaceful moment is coming—cherish it.",
+  "Great things take time. Be patient with yourself.",
+  "Your efforts are not unnoticed. Keep shining!",
+  "You will soon find clarity in something that has confused you.",
+  "The best is yet to come. Stay hopeful!",
+  "You are making progress, even if it doesn’t feel like it.",
+  "A small act of kindness today will create a ripple effect.",
+  "Your creativity will lead you to something amazing.",
+  "You are exactly where you need to be right now.",
+		 "Not everyone who smiles at you is your friend.",
+  "Life isn’t fair, and sometimes hard work goes unnoticed.",
+  "One day, the people you love will become memories.",
+  "The world doesn’t owe you anything—earn what you desire.",
+  "The strongest people are often the loneliest.",
+  "Time moves forward, whether you’re ready or not.",
+  "Happiness and suffering are two sides of the same coin.",
+  "Most people are too busy with their own struggles to care about yours.",
+  "Trust is fragile—once broken, it never fully heals.",
+  "No matter how much you plan, life will throw you surprises.",
+  "You will be forgotten faster than you’d like to believe.",
+  "Not everyone gets the closure they seek.",
+  "Sometimes, even your best effort won’t be enough.",
+  "The past cannot be changed, but it will haunt you if you let it.",
+  "Every dream has a price. Are you willing to pay it?",
+  "Some people just want to watch the world burn.",
+  "The truth is often buried under comfortable lies.",
+  "One day, you'll wish you had more time.",
+  "There’s always someone better, stronger, and smarter than you.",
+  "Pain is a great teacher, but the lessons are cruel.",
+  "The road to success is paved with sacrifices.",
+  "Most people wear masks, hiding who they truly are.",
+  "Love and loss go hand in hand—you can’t have one without the other.",
+  "Your worst enemy might be your own mind.",
+  "Even the stars will one day burn out. Nothing lasts forever."
+    ];
+
+    function generateFortune() {
+      const fortuneText = document.getElementById('fortune-text');
+      fortuneText.classList.remove('show');
+      
+      setTimeout(() => {
+        fortuneText.textContent = fortunes[Math.floor(Math.random() * fortunes.length)];
+        fortuneText.classList.add('show');
+        createSparkles(10);
+      }, 500);
+    }
+
+    function createSparkles(count) {
+      const colors = ['#ff00ff', '#00ffff', '#ffffff', '#ff00aa'];
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const sparkle = document.createElement('div');
+          sparkle.style.position = 'absolute';
+          sparkle.style.left = '50%';
+          sparkle.style.top = '50%';
+          sparkle.style.width = '4px';
+          sparkle.style.height = '4px';
+          sparkle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+          sparkle.style.borderRadius = '50%';
+          sparkle.style.filter = 'blur(1px)';
+          document.querySelector('.fortune-card').appendChild(sparkle);
+
+          const angle = Math.random() * Math.PI * 2;
+          const velocity = 1 + Math.random() * 2;
+          let x = 0, y = 0;
+
+          function animateSparkle() {
+            x += Math.cos(angle) * velocity;
+            y += Math.sin(angle) * velocity;
+            sparkle.style.transform = `translate(${x}px, ${y}px)`;
+            sparkle.style.opacity = 1 - (Math.abs(x) + Math.abs(y)) / 100;
+
+            if (sparkle.style.opacity > 0) {
+              requestAnimationFrame(animateSparkle);
+            } else {
+              sparkle.remove();
+            }
+          }
+
+          animateSparkle();
+        }, i * 100);
+      }
+    }
+
+    function createParticle(x, y) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = x + 'px';
+      particle.style.top = y + 'px';
+      particle.style.fontSize = Math.random() * 30 + 20 + 'px';
+      particle.textContent = '✨';
+      particle.style.setProperty('--tx', (Math.random() - 0.5) * 300 + 'px');
+      particle.style.setProperty('--ty', (Math.random() - 0.5) * 300 + 'px');
+      document.body.appendChild(particle);
+      
+      setTimeout(() => {
+        document.body.removeChild(particle);
+      }, 2000);
+    }
+
+    function activateChaos() {
+      const symbols = ['✨', '🌟', '💫', '⭐', '🌠', '🎇', '🔮', '✴️'];
+      let chaosLevel = 0;
+      
+      const chaosInterval = setInterval(() => {
+        if (chaosLevel > 40) {
+          clearInterval(chaosInterval);
+          return;
+        }
+        
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight;
+        createParticle(x, y);
+        
+        if (chaosLevel % 5 === 0) {
+          createSparkles(5);
+        }
+        
+        chaosLevel++;
+      }, 100);
+    }
+  </script>
+</body>
+</html>
