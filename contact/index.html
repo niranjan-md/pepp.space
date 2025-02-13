@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | PeppSpace</title>
+    <link rel="icon" type="image/x-icon" href="fav.ico">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'Inter', -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            padding: 2rem;
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .title {
+            font-size: 3.5rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            position: relative;
+        }
+
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(90deg, #FF6B6B, #4ECDC4);
+            border-radius: 3px;
+        }
+
+        .contact-cards {
+            display: grid;
+            gap: 2rem;
+            perspective: 1000px;
+        }
+
+        .contact-card {
+            background: #111111;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(20px) rotateX(-10deg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #FF6B6B22, #4ECDC422);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .contact-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            transform: translate(-100%, -100%);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-10px) scale(1.02) rotateX(0deg);
+            border-color: rgba(255, 255, 255, 0.2);
+            background: #151515;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .contact-card:hover::before {
+            opacity: 1;
+        }
+
+        .contact-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .contact-icon {
+            width: 32px;
+            height: 32px;
+            opacity: 0.9;
+            transition: transform 0.3s ease;
+        }
+
+        .contact-card:hover .contact-icon {
+            transform: scale(1.1) rotate(-5deg);
+        }
+
+        .contact-type {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .contact-value {
+            color: #999;
+            font-size: 1.1rem;
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+        }
+
+        .contact-card:hover .contact-value {
+            color: #fff;
+        }
+
+        .copy-feedback {
+            position: fixed;
+            top: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            color: #fff;
+            font-size: 1rem;
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .copy-feedback.active {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .discord-logo {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .floating-particles {
+            position: absolute;
+            pointer-events: none;
+            width: 100%;
+            height: 100%;
+        }
+
+        .particle {
+            position: absolute;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            border-radius: 50%;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .title {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="floating-particles"></div>
+        <h1 class="title">Get in Touch</h1>
+        
+        <div class="contact-cards">
+            <div class="contact-card" id="discord-card">
+                <div class="contact-header">
+                    <img src="dis.png" alt="Discord" class="discord-logo">
+                    <span class="contact-type">Discord</span>
+                </div>
+                <div class="contact-value">mrpepperfly</div>
+            </div>
+
+            <a href="mailto:semicolon-tank-bok@duck.com?body=Discord%20Username%20%3A%0A%0A%0A%0A%0ASent%20through%20pepp.space" class="contact-card" id="email-card" style="text-decoration: none;">
+                <div class="contact-header">
+                    <svg class="contact-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                    </svg>
+                    <span class="contact-type">Email</span>
+                </div>
+                <div class="contact-value">hello@pepp.space</div>
+            </a>
+        </div>
+    </div>
+
+    <div class="copy-feedback">Discord username copied to clipboard! 🎉</div>
+
+    <script>
+        // Create floating particles
+        const particlesContainer = document.querySelector('.floating-particles');
+        for (let i = 0; i < 20; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            const size = Math.random() * 10 + 5;
+            particle.style.width = `${size}px`;
+            particle.style.height = `${size}px`;
+            particlesContainer.appendChild(particle);
+
+            gsap.set(particle, {
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight
+            });
+
+            gsap.to(particle, {
+                x: 'random(-100, 100)',
+                y: 'random(-100, 100)',
+                opacity: 'random(0.2, 0.5)',
+                duration: 'random(2, 4)',
+                repeat: -1,
+                yoyo: true,
+                ease: 'sine.inOut'
+            });
+        }
+
+        // Animate elements on load
+        gsap.to('.title', {
+            opacity: 1,
+            duration: 1,
+            ease: 'power2.out',
+            y: 20
+        });
+
+        gsap.to('.contact-card', {
+            opacity: 1,
+            y: 0,
+            rotateX: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: 'power4.out'
+        });
+
+        // Mouse move effect on cards
+        document.querySelectorAll('.contact-card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                gsap.to(card, {
+                    duration: 0.5,
+                    rotateY: ((x - rect.width / 2) / rect.width) * 10,
+                    rotateX: ((y - rect.height / 2) / rect.height) * -10,
+                    ease: 'power2.out'
+                });
+
+                card.style.setProperty('--x', `${x}px`);
+                card.style.setProperty('--y', `${y}px`);
+            });
+
+            card.addEventListener('mouseleave', () => {
+                gsap.to(card, {
+                    duration: 0.5,
+                    rotateY: 0,
+                    rotateX: 0,
+                    ease: 'power2.out'
+                });
+            });
+        });
+
+        // Discord copy functionality with enhanced animation
+        const discordCard = document.getElementById('discord-card');
+        const copyFeedback = document.querySelector('.copy-feedback');
+        
+        discordCard.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText('mrpepperfly');
+                
+                // Card click animation
+                gsap.to(discordCard, {
+                    scale: 0.95,
+                    duration: 0.1,
+                    yoyo: true,
+                    repeat: 1,
+                    ease: 'power2.inOut'
+                });
+
+                // Show feedback
+                copyFeedback.classList.add('active');
+                
+                setTimeout(() => {
+                    copyFeedback.classList.remove('active');
+                }, 2000);
+            } catch (err) {
+                console.error('Failed to copy:', err);
+            }
+        });
+    </script>
+</body>
+</html>
