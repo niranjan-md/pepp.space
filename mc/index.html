@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Server List</title>
+	 <link rel="icon" type="image/x-icon" href="fav.ico">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+        
+        body {
+            background: #121212;
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            color: #ddd;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 50px 10px;
+        }
+        .server-card {
+            width: 280px;
+            padding: 20px;
+            background: #1e1e1e;
+            border: 2px solid #444;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s, background 0.3s;
+        }
+        .server-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 0px 20px rgba(0, 255, 0, 0.6);
+            background: #292929;
+        }
+        .server-icon {
+            width: 90px;
+            height: 90px;
+            border-radius: 10px;
+            background: #222;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        .server-name {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #0f0;
+        }
+        .server-desc {
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: #aaa;
+        }
+        .server-ip {
+            font-size: 12px;
+            background: #0f0;
+            color: black;
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>Minecraft Servers</h1>
+    <div class="container">
+        <div class="server-card" onclick="window.location.href='/akv';">
+            <img src="akv/icon.png" class="server-icon" alt="Server Icon">
+            <div class="server-name">AKV</div>
+            <div class="server-desc">Adichu Keeri Vaa makkale. Adichu Poli.</div>
+            <div class="server-ip">akv.mc.pepp.space</div>
+        </div>
+        
+        <div class="server-card" onclick="window.location.href='/pc';">
+            <img src="pc/icon.png" class="server-icon" alt="Server Icon">
+            <div class="server-name">PhantomCreate</div>
+            <div class="server-desc">Creative worlds with PSMP2 World.</div>
+            <div class="server-ip">pc.mc.pepp.space</div>
+        </div>
+    </div>
+</body>
+</html>
